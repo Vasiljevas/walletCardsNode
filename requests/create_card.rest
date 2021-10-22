@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/cards
+Content-Type: application/json
+
+{
+    "id": 10,
+    "validUntil": "2030-01-17",
+  "important": true,
+  "cardNumber": "32323",
+  "type": "Driver's License"
+}
