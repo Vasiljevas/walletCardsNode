@@ -1,63 +1,82 @@
+import dotenv from "dotenv/config";
 import express from "express";
-import { generateId } from "./utils/utils.js";
-import { requestLogger, unknownEndpoint } from "./middleware.js";
-import cardsDB from "./cards.js";
+import { requestLogger, unknownEndpoint, errorHandler } from "./middleware.js";
 import cors from "cors";
+import User from "./models/user.js";
 
 const app = express();
 
+app.use(express.static("build"));
 app.use(express.json());
 app.use(requestLogger);
 app.use(cors());
-app.use(express.static("build"));
-
-let cards = [...cardsDB];
 
 app.get("/", (req, res) => {
-  res.send("<h1>Hello World</h1>");
+	res.send("<h1>Hello World</h1>");
 });
 
-app.get("/api/cards", (req, res) => {
-  res.json(cards);
+app.get("/api/users", (req, res, next) => {
+	User.find({})
+		.then((users) => {
+			res.json(users);
+		})
+		.catch((err) => next(err));
 });
 
-app.get("/api/cards/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const card = cards.find((card) => card.id === id);
-
-  if (card) {
-    res.json(card);
-  } else {
-    res.statusMessage = "The card with that ID was not found";
-    res.status(404).end();
-  }
+app.get("/api/users/:id", (req, res, next) => {
+	User.findById(req.params.id)
+		.then((user) => {
+			if (user) {
+				res.json(user);
+			} else {
+				res.status(404).end();
+			}
+		})
+		.catch((err) => next(error));
 });
 
-app.post("/api/cards", (req, res) => {
-  const card = req.body;
-  if (!card.cardNumber) {
-    return res.status(400).json({ error: "content missing" });
-  }
+app.post("/api/users", (req, res, next) => {
+	const body = req.body;
 
-  const newCard = {
-    id: generateId(cards),
-    validUntil: card.validUntil,
-    important: card.important || false,
-    type: card.type,
-    cardNumber: card.cardNumber,
-  };
-  cards = cards.concat(newCard);
-  res.json(card);
+	const newUser = new User({
+		name: body.name,
+		phoneNumber: body.phoneNumber,
+	});
+
+	newUser
+		.save()
+		.then((savedUser) => savedUser.toJSON())
+		.then((savedAndFormattedUser) => {
+			res.json(savedAndFormattedUser);
+		})
+		.catch((err) => next(err));
 });
 
-app.delete("/api/cards/:id", (req, res) => {
-  const id = Number(req.params.id);
-  cards = cards.filter((card) => card.id !== id);
-  res.status(204).end();
+app.delete("/api/users/:id", (req, res, next) => {
+	User.findByIdAndRemove(req.params.id)
+		.then((result) => {
+			res.status(204).end();
+		})
+		.catch((err) => next(err));
+});
+
+app.put("/api/users/:id", (req, res, next) => {
+	const body = req.body;
+
+	const nUser = {
+		name: body.name,
+		phoneNumber: body.phoneNumber,
+	};
+	User.findByIdAndUpdate(req.params.id, nUser, { new: true })
+		.then((result) => {
+			res.json(result);
+		})
+		.catch((err) => next(err));
 });
 
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
