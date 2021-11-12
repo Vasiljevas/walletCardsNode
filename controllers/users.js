@@ -20,7 +20,7 @@ usersRouter.get("/:id", (req, res, next) => {
 				res.status(404).end();
 			}
 		})
-		.catch((err) => next(error));
+		.catch((err) => next(err));
 });
 
 usersRouter.post("/", (req, res, next) => {

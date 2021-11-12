@@ -1,16 +1,18 @@
-export const requestLogger = (req, res, next) => {
-	console.log("Method:", req.method);
-	console.log("Path:", req.path);
-	console.log("Body:", req.body);
-	console.log("---");
+import logger from "./logger.js";
+
+const requestLogger = (req, res, next) => {
+	logger.info("Method:", req.method);
+	logger.info("Path:", req.path);
+	logger.info("Body:", req.body);
+	logger.info("---");
 	next();
 };
 
-export const unknownEndpoint = (req, res) => {
+const unknownEndpoint = (req, res) => {
 	res.status(400).send({ error: "unknown endpoint" });
 };
 
-export const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, request, response, next) => {
 	console.error(error.message);
 
 	if (error.name === "CastError") {
@@ -21,3 +23,5 @@ export const errorHandler = (error, request, response, next) => {
 
 	next(error);
 };
+
+export default { requestLogger, unknownEndpoint, errorHandler };
