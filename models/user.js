@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	actions: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Action",
+		},
+	],
 });
 
 userSchema.set("toJSON", {
@@ -20,3 +26,4 @@ userSchema.set("toJSON", {
 });
 
 export default mongoose.model("User", userSchema);
+// module.exports = mongoose.model("User", userSchema); //for testing
