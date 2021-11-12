@@ -25,5 +25,5 @@ userSchema.set("toJSON", {
 	},
 });
 
-export default mongoose.model("User", userSchema);
-// module.exports = mongoose.model("User", userSchema); //for testing
+// export default mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema); //for testing

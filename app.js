@@ -29,5 +29,5 @@ app.use("/api/actions", actionsRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
-export default app;
-// module.exports = app; //for testing!
+// export default app;
+module.exports = app; //for testing!

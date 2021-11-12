@@ -1,6 +1,7 @@
 import express from "express";
 import Action from "../models/actions.js";
 import User from "../models/user.js";
+import mongoose from "mongoose";
 
 const actionsRouter = express.Router();
 
@@ -28,9 +29,14 @@ actionsRouter.get("/:id", async (req, res, next) => {
 
 actionsRouter.post("/", async (req, res, next) => {
 	const body = req.body;
-
-	const user = await User.findById(body.userId);
-
+	if (
+		body.action !== "insert" ||
+		body.action !== "update" ||
+		body.action !== "delete"
+	) {
+		res.status(400).end();
+	}
+	const user = await User.findById(body.user);
 	const newAction = new Action({
 		action: body.action,
 		date: new Date(),
@@ -59,7 +65,13 @@ actionsRouter.delete("/:id", async (req, res, next) => {
 
 actionsRouter.put("/:id", async (req, res, next) => {
 	const body = req.body;
-
+	if (
+		body.action !== "insert" ||
+		body.action !== "update" ||
+		body.action !== "delete"
+	) {
+		next({ name: "ValidationError", message: "Bad Action" });
+	}
 	const nAction = {
 		name: body.name,
 		phoneNumber: body.phoneNumber,
