@@ -5,7 +5,7 @@ import middleware from "./utils/middleware.js";
 import logger from "./utils/logger.js";
 import mongoose from "mongoose";
 import usersRouter from "./controllers/users.js";
-import actionsRouter from "./controllers/action.js";
+import actionsRouter from "./controllers/actions.js";
 
 const app = express();
 
@@ -29,5 +29,5 @@ app.use("/api/actions", actionsRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
-// export default app;
-module.exports = app; //for testing!
+export default app;
+// module.exports = app; //for testing!

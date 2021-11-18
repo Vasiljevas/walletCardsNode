@@ -1,12 +1,11 @@
 import express from "express";
-import User from "../models/user.js";
+import UsersService from "../services/users.js";
 
 const usersRouter = express.Router();
 
 usersRouter.get("/", async (req, res, next) => {
 	try {
-		// const users = await User.find({}).populate("notes");
-		const users = await User.find({});
+		const users = await UsersService.getAllUsers();
 		res.json(users);
 	} catch (e) {
 		next(e);
@@ -15,7 +14,7 @@ usersRouter.get("/", async (req, res, next) => {
 
 usersRouter.get("/:id", async (req, res, next) => {
 	try {
-		const user = await User.findById(req.params.id);
+		const user = await UsersService.getUser(req.params.id);
 		if (user) {
 			res.json(user);
 		} else {
@@ -27,17 +26,9 @@ usersRouter.get("/:id", async (req, res, next) => {
 });
 
 usersRouter.post("/", async (req, res, next) => {
-	const body = req.body;
-
-	const newUser = new User({
-		name: body.name,
-		phoneNumber: body.phoneNumber,
-		actions: [],
-	});
-
 	try {
-		const savedUser = await newUser.save();
-		res.json(savedUser);
+		await UsersService.createUser(req.body);
+		res.status(204).end();
 	} catch (err) {
 		next(err);
 	}
@@ -45,7 +36,7 @@ usersRouter.post("/", async (req, res, next) => {
 
 usersRouter.delete("/:id", async (req, res, next) => {
 	try {
-		await User.findByIdAndRemove(req.params.id);
+		await UsersService.deleteUser(req.params.id);
 		res.status(204).end();
 	} catch (e) {
 		next(e);
@@ -53,18 +44,9 @@ usersRouter.delete("/:id", async (req, res, next) => {
 });
 
 usersRouter.put("/:id", async (req, res, next) => {
-	const body = req.body;
-
-	const nUser = {
-		name: body.name,
-		phoneNumber: body.phoneNumber,
-		actions: [],
-	};
 	try {
-		const updatedUser = await User.findByIdAndUpdate(req.params.id, nUser, {
-			new: true,
-		});
-		res.json(updatedUser);
+		await UsersService.updateUser(req.params.id, req.body);
+		res.status(204).end();
 	} catch (e) {
 		next(e);
 	}

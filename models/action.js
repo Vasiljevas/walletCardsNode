@@ -17,5 +17,5 @@ actionSchema.set("toJSON", {
 	},
 });
 
-// export default mongoose.model("Action", actionSchema);
-module.exports = mongoose.model("Action", actionSchema); //for testing
+export default mongoose.model("Action", actionSchema);
+// module.exports = mongoose.model("Action", actionSchema); //for testing
