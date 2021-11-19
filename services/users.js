@@ -28,7 +28,7 @@ const deleteUser = async (id) => {
 	const deletedUser = await UsersRepository.deleteUser(id);
 	if (deletedUser.actions.length > 0) {
 		deletedUser.actions.forEach(async (action) => {
-			await ActionsRepository.deleteAction(action.id);
+			await ActionsRepository.deleteAction(action);
 		});
 	}
 	const newAction = {
