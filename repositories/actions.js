@@ -4,10 +4,6 @@ const getAllActions = async () => {
 	return await Action.find({});
 };
 
-const getActionsByUserId = async (userId) => {
-	return await Action.find({ user: userId }).exec();
-};
-
 const getActionById = async (id) => {
 	return await Action.findById(id);
 };
@@ -36,9 +32,15 @@ const updateAction = async (id, actionBody) => {
 
 export default {
 	getAllActions,
-	getActionsByUserId,
 	getActionById,
 	createAction,
 	deleteAction,
 	updateAction,
 };
+// module.exports = {
+// 	getAllActions,
+// 	getActionById,
+// 	createAction,
+// 	deleteAction,
+// 	updateAction,
+// }; //for testing

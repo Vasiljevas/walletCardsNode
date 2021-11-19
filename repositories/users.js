@@ -27,3 +27,4 @@ const updateUser = async (id, updatedUser) => {
 };
 
 export default { getAllUsers, getUser, createUser, deleteUser, updateUser };
+// module.exports = { getAllUsers, getUser, createUser, deleteUser, updateUser }; //for testing

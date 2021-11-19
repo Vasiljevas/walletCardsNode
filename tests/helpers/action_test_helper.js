@@ -1,4 +1,4 @@
-const Action = require("../models/actions.js");
+const Action = require("../../models/action.js");
 const initialActions = [
 	{
 		action: "insert",

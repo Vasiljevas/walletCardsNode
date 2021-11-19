@@ -58,11 +58,13 @@ const updateAction = async (id, actionBody) => {
 			}
 		}
 		const foundNewUser = users.find((user) => user.id === actionBody.user);
-		await UsersRepository.updateUser(foundNewUser.id, {
-			name: foundNewUser.name,
-			phoneNumber: foundNewUser.phoneNumber,
-			actions: [...foundNewUser.actions, id],
-		});
+		if (foundNewUser) {
+			await UsersRepository.updateUser(foundNewUser.id, {
+				name: foundNewUser.name,
+				phoneNumber: foundNewUser.phoneNumber,
+				actions: [...foundNewUser.actions, id],
+			});
+		}
 	}
 };
 
@@ -73,3 +75,10 @@ export default {
 	deleteAction,
 	updateAction,
 };
+// module.exports = {
+// 	getAllActions,
+// 	getActionById,
+// 	createAction,
+// 	deleteAction,
+// 	updateAction,
+// }; //for testing

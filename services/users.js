@@ -62,3 +62,10 @@ export default {
 	deleteUser,
 	updateUser,
 };
+// module.exports = {
+// 	getAllUsers,
+// 	getUser,
+// 	createUser,
+// 	deleteUser,
+// 	updateUser,
+// }; //for testing
