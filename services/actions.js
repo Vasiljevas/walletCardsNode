@@ -1,4 +1,3 @@
-import action from "../models/action.js";
 import ActionsRepository from "../repositories/actions.js";
 import UsersRepository from "../repositories/users.js";
 
@@ -11,7 +10,11 @@ const getActionById = async (id) => {
 };
 
 const createAction = async (actionBody) => {
-	const createdAction = await ActionsRepository.createAction(actionBody);
+	const createdAction = await ActionsRepository.createAction({
+		action: actionBody.action,
+		user: actionBody.user,
+		date: new Date(),
+	});
 	const user = await UsersRepository.getUser(actionBody.user);
 	await UsersRepository.updateUser(user.id, {
 		name: user.name,
